@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <table id="cases">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Priority</th>
+            <th>Description</th>
+            <th>Actors</th>
+            <th>Pre-conditions</th>
+            <th>Started-by</th>
+            <th>Flow</th>
+            <th>Post-conditions</th>
+            <th>Notes</th>
+        </tr>
+        <% cases.cases.forEach(el => { %>
+            <tr>
+                <td><%= el.id %></td>
+                <td><%= el.name %></td>
+                <td><%= el.prior %></td>
+                <td><%= el.desc %></td>
+                <td><%= el.actors %></td>
+                <td><%= el.precon %></td>
+                <td><%= el.starter %></td>
+                <td><%= el.flow %></td>
+                <td><%= el.postcon %></td>
+                <td><%= el.notes %></td>
+            </tr>
+        <%})%>
+    </table>
+    <form action="/add" class="container" method="POST" name="fileinfo">
+        <input type="hidden" value="<%- cases.lastId %>" name="lastId">
+        <input type="hidden" value="CU-<%- cases.lastId %>" name="id">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" required><br>
+
+        <label for="prior">Priority</label>
+        <select name="prior" id="prior" required>
+            <option value="High" selected>High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+        </select><br>
+
+        <label for="desc">Description</label>
+        <textarea name="desc" id="desc" cols="30" rows="10" required></textarea><br>
+
+        <label for="actors">Actors</label>
+        <input type="text" id="actors" name="actors" required>
+
+        <label for="precon">Pre-conditions</label>
+        <textarea name="precon" id="precon" cols="30" rows="10" required></textarea><br>
+
+        <label for="starter">Started-by</label>
+        <input type="text" id="starter" name="starter" required><br>
+
+        <label for="flow">Flow</label>
+        <input type="text" id="flow" name="flow" required><br>
+
+        <label for="postcon">Post-conditions</label>
+        <textarea name="postcon" id="postcon" cols="30" rows="10" required></textarea><br>
+
+        <label for="notes">Notes</label>
+        <textarea name="notes" id="notes" cols="30" rows="10"></textarea><br>
+
+        <input type="submit" value="Add">
+    </form>
+
+</body>
+
+</html>
