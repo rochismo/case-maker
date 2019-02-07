@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="css/main.css">
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
@@ -24,23 +25,43 @@
             <th>Notes</th>
         </tr>
         <% cases.cases.forEach(el => { %>
-            <tr>
-                <td><%= el.id %></td>
-                <td><%= el.name %></td>
-                <td><%= el.prior %></td>
-                <td><%= el.desc %></td>
-                <td><%= el.actors %></td>
-                <td><%= el.precon %></td>
-                <td><%= el.starter %></td>
-                <td><%= el.flow %></td>
-                <td><%= el.postcon %></td>
-                <td><%= el.notes %></td>
-            </tr>
+        <tr>
+            <td>
+                <%= el.id %>
+            </td>
+            <td>
+                <%= el.name %>
+            </td>
+            <td>
+                <%= el.prior %>
+            </td>
+            <td>
+                <%= el.desc %>
+            </td>
+            <td>
+                <%= el.actors %>
+            </td>
+            <td>
+                <%= el.precon %>
+            </td>
+            <td>
+                <%= el.starter %>
+            </td>
+            <td>
+                <%= el.flow %>
+            </td>
+            <td>
+                <%= el.postcon %>
+            </td>
+            <td>
+                <%= el.notes %>
+            </td>
+        </tr>
         <%})%>
     </table>
-    <form action="/add" class="container" method="POST" name="fileinfo">
-        <input type="hidden" value="<%- cases.lastId %>" name="lastId">
-        <input type="hidden" value="CU-<%- cases.lastId %>" name="id">
+    <form action="/add" class="container" method="POST" name="fileinfo" onsubmit="notify()">
+        <input type="hidden" value="<%- cases.lastId %>" name="lastId" id="lastId">
+        <input type="hidden" value="CU-<%- cases.lastId %>" name="id" id="id">
         <label for="name">Name</label>
         <input type="text" name="name" id="name" required><br>
 
@@ -74,7 +95,86 @@
 
         <input type="submit" value="Add">
     </form>
+    <script>
+        const socket = io.connect();
+        const lastId = document.querySelector("#lastId");
+        const id = document.querySelector("#id");
+        const tbl = document.querySelector("#cases");
+        function notify() {
+            socket.emit("post");
+        }
 
+        socket.on("render", render);
+
+        async function render(data) {
+            console.log(data.log);
+            const preFetch = await fetch(`${window.location.href}get-posts`);
+            const posts = await preFetch.json();
+            lastId.value = posts.lastId;
+            id.value = `CU-${posts.lastId}`;
+            let html = `<tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Priority</th>
+            <th>Description</th>
+            <th>Actors</th>
+            <th>Pre-conditions</th>
+            <th>Started-by</th>
+            <th>Flow</th>
+            <th>Post-conditions</th>
+            <th>Notes</th>
+        </tr>`;
+            posts.cases.forEach(({
+                id,
+                lastId,
+                name,
+                prior,
+                desc,
+                actors,
+                precon,
+                starter,
+                flow,
+                postcon,
+                notes
+            }) => {
+                html += `
+                <tr>
+            <td>
+                ${id}
+            </td>
+            <td>
+                    ${name} 
+            </td>
+            <td>
+                    ${prior}
+            </td>
+            <td>
+                    ${desc} 
+            </td>
+            <td>
+                    ${actors} 
+            </td>
+            <td>
+                    ${precon}
+            </td>
+            <td>
+                    ${starter}
+            </td>
+            <td>
+                    ${flow}
+            </td>
+            <td>
+                    ${postcon}
+            </td>
+            <td>
+                 ${notes}
+            </td>
+        </tr>
+                `
+            })
+            cases.innerHTML = html;
+        }
+    </script>
 </body>
 
 </html>
