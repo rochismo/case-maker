@@ -12,7 +12,6 @@ module.exports = {
         cases.lastId = ++obj.lastId;
         cases.cases.push(obj);
         const data = json.stringify(cases, null, 4);
-        console.log(cases);
         try {
             fs.writeFileSync("./cases.json", data);
             return true;
