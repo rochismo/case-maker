@@ -4,11 +4,11 @@ import {
 export class Service {
     constructor() {
         this.sock = io({
-            transports: ['websocket'],
-            upgrade: false
+            transports: ['websocket'], upgrade: false
         });
-        this.setUp();
     }
+
+    
     setUp() {
         for (let key in Events) {
             const {name, cb} = Events[key]
@@ -17,6 +17,7 @@ export class Service {
     }
 
     emit(msg, data = null) {
+        console.log("Emitt");
         this.sock.emit(msg, data);
     }
 

@@ -4,6 +4,7 @@ import {
 
 
 const service = new Service();
+service.setUp();
 const elements = Array.from(document.querySelector("form").children);
 elements.forEach(child => {
     child.addEventListener("input", ev => {
