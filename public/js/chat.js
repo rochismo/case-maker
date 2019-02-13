@@ -75,7 +75,7 @@ $(document).ready(function () {
     });
 
 
-    service.on("renderMsg", addMsg);
+    service.on("renderMsg", insertMsg);
     service.on('removeUser', function(userId) {
         $('li#user' + userId).remove();
         service.emit("updateUsers");
